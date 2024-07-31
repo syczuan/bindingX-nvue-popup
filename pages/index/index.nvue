@@ -60,7 +60,12 @@
       <u-switch v-model="option.pagePopup" />
     </view>
 
-    <text class="open_button" @click="open">打开弹框</text>
+    <text
+      class="open_button"
+      @click="open"
+      :style="{ paddingBottom: safeAreaHeight + 'px' }"
+      >打开弹框</text
+    >
     <sycPanpopup
       ref="sycPanpopup"
       :width="`${option.width}%`"
@@ -91,6 +96,7 @@
         </view>
         <scroll-view :scroll-y="true" class="content_box">
           <text class="text">{{ contentText }}</text>
+          <view :style="{ height: safeAreaHeight + 'px' }"></view>
         </scroll-view>
       </view>
     </sycPanpopup>
@@ -128,6 +134,14 @@ export default {
   },
   methods: {
     open() {
+      // uni.$emit("popup-option", {
+      //   position: this.position,
+      //   contentText: this.contentText,
+      //   ...this.option,
+      // });
+      // const subNVue = uni.getSubNVueById("index-subnvuePopup");
+      // subNVue.show("fade-in", 300);
+      // return;
       if (this.option.pagePopup) {
         uni.navigateTo({
           url: "/pages/index/pagePopup",
@@ -163,6 +177,9 @@ export default {
     },
   },
   computed: {
+    safeAreaHeight() {
+      return uni.getSystemInfoSync().safeAreaInsets.bottom;
+    },
     // 已选择的弹框位置
     selectedPosition() {
       return this.position.list[this.position.selected];
@@ -241,15 +258,16 @@ export default {
     .option_list {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       flex-direction: row;
+      flex-wrap: wrap;
       .option_item {
-        min-width: 140rpx;
+        width: 140rpx;
         line-height: 35px;
         border-radius: 4px;
         text-align: center;
         border: 1px solid #dddddd;
-        margin-right: 20rpx;
-        padding: 0px 20rpx;
+        margin-bottom: 10px;
         background-color: #ffffff;
         color: #000000;
         font-size: 14px;
@@ -282,8 +300,9 @@ export default {
 }
 
 .open_button {
-  color: #000000;
-  background-color: antiquewhite;
+  font-size: 16px;
+  color: #ffffff;
+  background-color: rgb(37, 144, 244);
   text-align: center;
   line-height: 50px;
   position: fixed;

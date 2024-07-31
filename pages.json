@@ -4,7 +4,26 @@
     {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "uni-app"
+        "navigationBarTitleText": "uni-app",
+        "app-plus": {
+          "subNVues": [
+            {
+              "id": "index-subnvuePopup",
+              "type": "popup",
+              "path": "pages/index/subnvuePopup",
+              "style": {
+                "position": "absolute",
+                "margin": "auto",
+                "top": "0px",
+                "bottom": "0px",
+                "zindex": 1,
+                "mask": "transparent",
+                "background": "transparent",
+                "popGesture": "none"
+              }
+            }
+          ]
+        }
       }
     },
     {

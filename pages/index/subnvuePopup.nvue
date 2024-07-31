@@ -68,7 +68,8 @@ export default {
   methods: {
     close() {
       this.showPopup = false;
-      uni.navigateBack({ delta: 1 });
+      const subNVue = uni.getSubNVueById("index-subnvuePopup");
+      subNVue.hide("fade-out", 300);
     },
     // 触摸顶栏
     touchHeadbar() {

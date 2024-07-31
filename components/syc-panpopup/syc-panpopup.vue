@@ -34,7 +34,7 @@ export default {
     },
     /**
      * 弹框宽度
-     * mode=top|bottom时默认100%
+     * mode=top|bottom时固定100%
      * mode=left|right时默认60%
      * %-屏幕可用高度|宽度百分比
      * Number|String 像素高度
@@ -46,7 +46,7 @@ export default {
     /**
      * 弹框高度
      * mode=top|bottom时默认50%
-     * mode=left|right时默认100%
+     * mode=left|right时固定100%
      * %-屏幕可用高度|宽度百分比
      * Number|String 像素高度
      */
@@ -54,7 +54,7 @@ export default {
       type: [String, Number],
       default: "",
     },
-    // 弹出方向 left|bottom
+    // 弹出方向 top|bottom|left|right
     mode: {
       type: [String],
       default: "bottom",
@@ -74,7 +74,10 @@ export default {
       type: [String, Number],
       default: 0.5,
     },
-    // 弹框整体可下滑动
+    /**
+     * 全局弹框手势
+     * 开启后会与内部滚动视图如scroll-view冲突
+     */
     fullPan: {
       type: [Boolean],
       default: false,
@@ -83,7 +86,7 @@ export default {
      * 滑动关闭阈值
      * %-弹框高度百分比
      * Number|String 像素高度
-     * 实际高度低于弹框高度时为0
+     * 实际高度|宽度低于弹框高度时为0
      */
     threshold: {
       type: [String, Number],
