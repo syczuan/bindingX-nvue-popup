@@ -44,6 +44,18 @@
     </view>
 
     <view class="option_box">
+      <view class="option_slider">
+        <text class="slider_text">关闭阈值</text>
+        <u-slider
+          class="slider"
+          v-model="option.threshold"
+          blockColor="#3677f8"
+        />
+        <text class="slider_value">{{ option.threshold }}%</text>
+      </view>
+    </view>
+
+    <view class="option_box">
       <text class="option_title">圆角</text>
       <u-switch v-model="option.borderRadius" />
     </view>
@@ -54,19 +66,33 @@
     </view>
 
     <view class="option_box">
-      <text class="option_title"
-        >全屏弹框(通过uni.navigateTo实现;因演示通过uni.$emit传递配置需要延迟打开,实际使用可直接在页面中定义好配置不需要延迟)</text
-      >
-      <u-switch v-model="option.pagePopup" />
+      <text class="option_title">弹框类型</text>
+      <view class="option_list">
+        <text
+          :class="{
+            option_item: true,
+            selected_item: popupType.selected === index,
+          }"
+          v-for="(item, index) of popupType.list"
+          :key="index"
+          @click="popupType.selected = index"
+        >
+          {{ item.name }}
+        </text>
+      </view>
+      <text class="option_tip">
+        {{ popupType.list[popupType.selected].tip }}
+      </text>
     </view>
 
     <text
       class="open_button"
       @click="open"
       :style="{ paddingBottom: safeAreaHeight + 'px' }"
-      >打开弹框</text
     >
-    <sycPanpopup
+      打开弹框
+    </text>
+    <syc-panpopup
       ref="sycPanpopup"
       :width="`${option.width}%`"
       :height="`${option.height}%`"
@@ -78,6 +104,8 @@
       :fullPan="option.fullPan"
       :mode="selectedPosition"
       :borderRadius="option.borderRadius ? '10px' : ''"
+      :isScreenHeight="popupType.selected !== 0"
+      :threshold="`${option.threshold}%`"
     >
       <view class="popup_content" :style="popupContentStyle">
         <view
@@ -94,19 +122,19 @@
           >
           </view>
         </view>
-        <scroll-view :scroll-y="true" class="content_box">
-          <text class="text">{{ contentText }}</text>
-          <view :style="{ height: safeAreaHeight + 'px' }"></view>
-        </scroll-view>
+        <list class="content_box" :bounce="false">
+          <cell>
+            <text class="text">{{ contentText }}</text>
+            <view :style="{ height: safeAreaHeight + 'px' }"></view>
+          </cell>
+        </list>
       </view>
-    </sycPanpopup>
+    </syc-panpopup>
   </scroll-view>
 </template>
 
 <script>
-import sycPanpopup from "@/components/syc-panpopup/syc-panpopup.vue";
 export default {
-  components: { sycPanpopup },
   data() {
     return {
       position: {
@@ -118,12 +146,23 @@ export default {
         width: 70,
         // 高度(position为left、right时始终为100%)
         height: 70,
+        // 滑动关闭阈值
+        threshold: 50,
         // 开启全局弹框手势
         fullPan: false,
         // 设置圆角
         borderRadius: true,
-        // 页面级弹框
-        pagePopup: false,
+      },
+      popupType: {
+        selected: 0,
+        list: [
+          { name: "普通弹框", tip: "无法遮挡顶部导航和状态栏" },
+          { name: "SubNvue弹框", tip: "全屏遮挡" },
+          {
+            name: "页面弹框",
+            tip: "全屏遮挡;因演示通过uni.$emit传递配置需要延迟打开 实际使用可直接在页面中定义好配置不需要延迟",
+          },
+        ],
       },
       // 显示弹框
       showPopup: false,
@@ -134,30 +173,32 @@ export default {
   },
   methods: {
     open() {
-      // uni.$emit("popup-option", {
-      //   position: this.position,
-      //   contentText: this.contentText,
-      //   ...this.option,
-      // });
-      // const subNVue = uni.getSubNVueById("index-subnvuePopup");
-      // subNVue.show("fade-in", 300);
-      // return;
-      if (this.option.pagePopup) {
-        uni.navigateTo({
-          url: "/pages/index/pagePopup",
-          animationType: "fade-in",
-          animationDuration: 300,
-          success: () => {
-            uni.$emit("popup-option", {
-              position: this.position,
-              contentText: this.contentText,
-              ...this.option,
-            });
-          },
-        });
-        return;
+      const emitData = {
+        position: this.position,
+        contentText: this.contentText,
+        ...this.option,
+      };
+      switch (this.popupType.selected) {
+        case 0:
+          this.showPopup = true;
+          break;
+        case 1:
+          const subNVue = uni.getSubNVueById("index-subnvuePopup");
+          subNVue.show("fade-in", 300, () => {
+            uni.$emit("popup-option-subnvue", emitData);
+          });
+          break;
+        case 2:
+          uni.navigateTo({
+            url: "/pages/index/pagePopup",
+            animationType: "fade-in",
+            animationDuration: 300,
+            success: () => uni.$emit("popup-option-page", emitData),
+          });
+          break;
+        default:
+          break;
       }
-      this.showPopup = true;
     },
     close() {
       this.showPopup = false;
@@ -262,7 +303,7 @@ export default {
       flex-direction: row;
       flex-wrap: wrap;
       .option_item {
-        width: 140rpx;
+        min-width: 140rpx;
         line-height: 35px;
         border-radius: 4px;
         text-align: center;
@@ -271,6 +312,7 @@ export default {
         background-color: #ffffff;
         color: #000000;
         font-size: 14px;
+        padding: 0px 8rpx;
       }
       .selected_item {
         border: 1px solid #0267ff;
@@ -283,7 +325,7 @@ export default {
       flex-direction: row;
       .slider_text,
       .slider_value {
-        width: 100rpx;
+        min-width: 100rpx;
         font-size: 14px;
       }
       .slider_value {
@@ -295,6 +337,10 @@ export default {
       .slider_disabled {
         opacity: 0.3;
       }
+    }
+    .option_tip {
+      color: #6e6e6e;
+      font-size: 14px;
     }
   }
 }
@@ -323,7 +369,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: #4c4c4c;
+      background-color: #939393;
     }
   }
   .content_box {

@@ -1,6 +1,6 @@
 <template>
   <view class="popup_view">
-    <sycPanpopup
+    <syc-panpopup
       ref="sycPanpopup"
       :width="`${option.width}%`"
       :height="`${option.height}%`"
@@ -12,6 +12,8 @@
       :fullPan="option.fullPan"
       :mode="selectedPosition"
       :borderRadius="option.borderRadius ? '10px' : ''"
+      :isScreenHeight="true"
+      :threshold="`${option.threshold}%`"
     >
       <view class="popup_content" :style="popupContentStyle">
         <view
@@ -33,13 +35,11 @@
           <view :style="{ height: safeAreaHeight + 'px' }"></view>
         </scroll-view>
       </view>
-    </sycPanpopup>
+    </syc-panpopup>
   </view>
 </template>
 <script>
-import sycPanpopup from "@/components/syc-panpopup/syc-panpopup.vue";
 export default {
-  components: { sycPanpopup },
   data() {
     return {
       // 显示弹框
@@ -49,7 +49,7 @@ export default {
     };
   },
   onLoad() {
-    uni.$on("popup-option", (val) => {
+    uni.$on("popup-option-page", (val) => {
       this.option = val;
     });
   },
@@ -63,7 +63,7 @@ export default {
     }, 300);
   },
   onUnload() {
-    uni.$off("popup-option");
+    uni.$off("popup-option-page");
   },
   methods: {
     close() {
@@ -163,7 +163,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: #4c4c4c;
+      background-color: #939393;
     }
   }
   .content_box {
