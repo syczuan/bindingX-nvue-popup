@@ -1,7 +1,7 @@
 {
   "easycom": {
     "^u-(.*)": "@/uni_modules/uview-ui/components/u-$1/u-$1.vue",
-    "^syc-(.*)": "@/uni_modules/syc-components/syc-$1.vue"
+    "^syc-(.*)": "@/uni_modules/syc-panpopup/components/syc-$1/syc-$1.vue"
   },
   "pages": [
     //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
