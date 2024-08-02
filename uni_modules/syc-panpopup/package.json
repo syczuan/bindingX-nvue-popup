@@ -1,11 +1,12 @@
 {
   "id": "syc-panpopup",
   "displayName": "bindingX手势拖拽关闭弹框",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "基于第三方popup组件实现的bindingX手势拖拽关闭弹框",
   "keywords": [
-    "bindingX popup"
-  ],
+    "bindingX",
+    "popup"
+],
   "repository": "https://github.com/syczuan/bindingX-nvue-popup.git",
   "engines": {
     "HBuilderX": "^3.1.0"
@@ -37,9 +38,9 @@
     "encrypt": [],
     "platforms": {
       "cloud": {
-        "tcb": "u",
-        "aliyun": "u",
-        "alipay": "u"
+        "tcb": "y",
+        "aliyun": "y",
+        "alipay": "y"
       },
       "client": {
         "Vue": {

@@ -7,6 +7,23 @@ nvue页面定义: 在pages.json中定义的页面文件的文件后缀为.nvue ,
 
 
 
+*示例项目中`subNvue`页面在`pages.json`中定义时`style`-`mask`属性在部分机型上设置`transparent`会出现纯白背景，请用`rgba(0,0,0,0)`代替*
+
+```json
+{
+    "id": "xxx",
+    "type": "popup",
+    "path": "pages/xxx/xxx",
+    "style": {
+        "mask": "rgba(0,0,0,0)",
+    }
+}
+```
+
+
+
+
+
 **<font style="color:#e96900">以下组件属性及使用方式仅适合`uView2.0`中的`u-popup`，也可以使用官方扩展组件`uni-popup`或其他，使用非`u-popup`组件时部分参数和使用方式需要对应调整</font>**
 
 

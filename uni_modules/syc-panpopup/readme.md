@@ -3,6 +3,23 @@
 **仅支持 nvue 页面** <br>
 nvue 页面定义: 在 pages.json 中定义的页面文件的文件后缀为.nvue ,包含嵌入这个.nvue 页面的.vue 组件; .vue 页面中的.nvue 组件不属于
 
+
+
+*示例项目中`subNvue`页面在`pages.json`中定义时`style`-`mask`属性在部分机型上设置`transparent`会出现纯白背景，请用`rgba(0,0,0,0)`代替*
+
+```json
+{
+    "id": "xxx",
+    "type": "popup",
+    "path": "pages/xxx/xxx",
+    "style": {
+        "mask": "rgba(0,0,0,0)",
+    }
+}
+```
+
+
+
 **<font style="color:#e96900">以下组件属性及使用方式仅适合`uView2.0`中的`u-popup`，也可以使用官方扩展组件`uni-popup`或其他，使用非`u-popup`组件时部分参数和使用方式需要对应调整</font>**
 
 #### 组件属性(部分)
