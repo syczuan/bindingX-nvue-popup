@@ -9,12 +9,15 @@
     :overlayOpacity="opacity"
   >
     <view
-      @click="(e) => e.stopPropagation()"
       @touchstart="fullPanTouchStart"
+      @touchend="handleTouchEnd"
       class="container"
       ref="container"
       :style="popupStyle"
     >
+      <view class="test_view" @touchend="testView">
+        <text class="text">点击按钮</text>
+      </view>
       <slot></slot>
     </view>
   </u-popup>
@@ -129,12 +132,24 @@ export default {
       isInAnimation: false,
       // 手势bindingX绑定
       panBind: null,
+      touchEndTimer: null,
     };
   },
   methods: {
+    testView() {
+      console.log("sffdgfgdhghfghfh");
+    },
     // 弹框整体滑动
     fullPanTouchStart() {
       this.fullPan && this.onTouchStart();
+    },
+    handleTouchEnd(e) {
+      clearTimeout(this.touchEndTimer);
+      this.touchEndTimer = setTimeout(() => {
+        if (this.panBind.token) {
+          Binding.unbind({ eventType: "pan", token: this.panBind.token });
+        }
+      }, 300);
     },
     // 获取dom
     getEl(el) {
@@ -145,6 +160,7 @@ export default {
         return el instanceof HTMLElement ? el : el.$el;
       }
     },
+
     bindTiming() {
       if (!this.$refs.container) {
         return;
@@ -252,7 +268,7 @@ export default {
         },
         (e) => {
           if (e.state !== "start") {
-            Binding.unbind({ token: this.panBind.token, eventType: "pan" });
+            // Binding.unbind({ token: this.panBind.token, eventType: "pan" });
             switch (this.mode) {
               case "top":
                 this.deltaY = e.deltaY;
@@ -401,3 +417,18 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.test_view {
+  width: 100rpx;
+  height: 100rpx;
+  margin-left: 100rpx;
+  background-color: blueviolet;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .text {
+    color: #ffffff;
+    font-size: 14px;
+  }
+}
+</style>
