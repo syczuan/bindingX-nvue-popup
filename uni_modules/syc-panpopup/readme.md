@@ -22,6 +22,12 @@ nvue 页面定义: 在 pages.json 中定义的页面文件的文件后缀为.nvu
 
 **<font style="color:#e96900">以下组件属性及使用方式仅适合`uView2.0`中的`u-popup`，也可以使用官方扩展组件`uni-popup`或其他，使用非`u-popup`组件时部分参数和使用方式需要对应调整</font>**
 
+
+
+**<font style="color:red">安卓下开启全局手势`fullPan`或绑定了`touchstart`事件的容器中，`click`事件将无法触发，临时方案为绑定`touchstart`代替`click`，但按下会立即触发</font>**
+
+
+
 #### 组件属性(部分)
 
 |        属性        |      类型      |    默认值     | <font align="center">备注</font>                                                                                                   |
